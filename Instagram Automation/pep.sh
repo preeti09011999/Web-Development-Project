@@ -1,0 +1,1 @@
+node "insta.js" "./credentials.json" "cristiano" 25
