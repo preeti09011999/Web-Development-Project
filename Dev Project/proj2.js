@@ -29,11 +29,12 @@ let fs = require("fs");
 
     // --------------------------------Total case-----------------------------------
     await tab.waitForSelector(".maincounter-number");
-    const tcase = await tab.$eval('.maincounter-number span',element => element.innerHTML);
-    // browser.close();
-    console.log('Totalcase :'+ tcase);
-    
-    // --------------------------------Finding href----------------------------------
+    const text = await tab.evaluate(() => Array.from(document.querySelectorAll('.maincounter-number span'), element => element.textContent));
+    console.log("CoronaVirus Cases : " + text[0]);
+    console.log("Deaths : " + text[1]);
+    console.log("Recovered :" + text[2]);
+
+    --------------------------------Finding href----------------------------------
     const elementHandles = await tab.$$('a');
     const propertyJsHandles = await Promise.all(
       elementHandles.map(handle => handle.getProperty('href'))
@@ -52,10 +53,10 @@ let fs = require("fs");
     await tab.goto(pUrl);
     await tab.waitForNavigation({waituntil : "load",timeout : 0});
     await tab.screenshot({path : 'total-cases_graph.png'});
-    await tab.goto('url'+worldwide-graphs);
+    await tab.goto(url+ 'worldwide-graphs');
     await tab.waitForNavigation({waituntil : "load",timeout : 0});
 
-    // ----------------------active-cases--------------------------------------------
+    ----------------------active-cases--------------------------------------------
     await tab.goto('url'+active-cases);
     await tab.waitForNavigation({waituntil : "load",timeout:0});
     await tab.screenshot({path : 'active-cases_graph.png'});
@@ -65,7 +66,7 @@ let fs = require("fs");
     await tab.waitForNavigation({waituntil : "load",timeout:0});
     await tab.screenshot({path : 'total_deaths_graph.png'});
     
-    // -----------------------Using Cheerio to print table----------------------------
+  //   -----------------------Using Cheerio to print table----------------------------
   //   request(hrefs2[5],function (err,res,html) {
   //   if(err === null && res.statusCode === 200){
   //       fs.writeFileSync("index.html",html);
@@ -86,10 +87,9 @@ let fs = require("fs");
 
   //   // console.log(text);
   //   fs.writeFileSync('file.json',text);
-  //   browser.close();
 
-  // }
-  browser.close();
+  }
+ 
 
    } catch(err){
        console.log(err);
